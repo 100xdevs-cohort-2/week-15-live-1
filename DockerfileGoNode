@@ -1,0 +1,32 @@
+
+FROM golang:1.18-alpine AS go-builder
+
+WORKDIR /app
+
+COPY go/go.mod go/go.sum ./
+RUN go mod download
+
+COPY go/ .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o mygobinary .
+
+FROM node:20-alpine
+
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+COPY prisma ./prisma
+RUN npx prisma generate
+
+COPY tsconfig.json ./
+COPY src ./src
+
+RUN npm run build
+
+COPY --from=go-builder /app/mygobinary .
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
+
+# docker build -f DockerfileGoNode -t anyurfav-image-name
