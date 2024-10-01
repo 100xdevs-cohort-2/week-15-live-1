@@ -1,5 +1,5 @@
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client"
 import express from "express";
 
 const app = express();
@@ -26,4 +26,4 @@ app.post("/", async (req, res) => {
     })
 })
 
-app.listen(3000);
+app.listen(3000,()=>{console.log('listening ion 3000')});
