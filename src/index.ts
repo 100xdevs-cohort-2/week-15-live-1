@@ -22,7 +22,7 @@ app.post("/", async (req, res) => {
     })
 
     res.json({
-        message: "Done signing up!"
+        message: "signed up!"
     })
 })
 
